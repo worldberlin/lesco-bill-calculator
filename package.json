@@ -1,0 +1,21 @@
+{
+  "name": "lesco-bill-calculator",
+  "version": "1.0.0",
+  "description": "Open-source JavaScript engine for calculating and simulating LESCO domestic electricity bills under NEPRA tariff slabs in Pakistan.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "lesco",
+    "electricity-bill",
+    "pakistan",
+    "nepra",
+    "bill-calculator",
+    "tariff-slabs",
+    "utility"
+  ],
+  "author": "LESCOBill Guide (onlinebillchecklesco.com)",
+  "license": "MIT",
+  "homepage": "https://onlinebillchecklesco.com/bill-calculator"
+}
