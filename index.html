@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LESCO Bill Calculator 2026 | Open Source Electricity Tariff Estimator</title>
+  <meta name="description" content="Free open-source LESCO electricity bill calculator for domestic consumers in Lahore. Calculates NEPRA progressive tariff slabs, taxes, and surcharges." />
+  <link rel="canonical" href="https://onlinebillchecklesco.com/bill-calculator" />
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --accent: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+    .container { max-width: 680px; width: 100%; background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 32px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
+    h1 { font-size: 1.75rem; margin-bottom: 8px; color: #fff; }
+    .subtitle { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px; line-height: 1.5; }
+    .input-group { margin-bottom: 20px; }
+    label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: #e2e8f0; }
+    input[type="number"] { width: 100%; padding: 12px 16px; background: #0f172a; border: 1px solid var(--border); border-radius: 8px; color: #fff; font-size: 1rem; outline: none; }
+    input[type="number"]:focus { border-color: var(--accent); }
+    .checkbox-group { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+    .checkbox-group input { width: 18px; height: 18px; cursor: pointer; }
+    button { width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    button:hover { background: var(--primary-hover); }
+    .results { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border); display: none; }
+    .result-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.95rem; color: var(--text-muted); }
+    .result-row.total { font-size: 1.2rem; font-weight: bold; color: var(--accent); border-top: 1px solid var(--border); margin-top: 12px; padding-top: 12px; }
+    .official-box { margin-top: 32px; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 16px; font-size: 0.9rem; line-height: 1.6; }
+    .official-box a { color: var(--accent); text-decoration: none; font-weight: 600; }
+    .official-box a:hover { text-decoration: underline; }
+    footer { margin-top: 32px; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
+    footer a { color: var(--text-muted); text-decoration: none; margin: 0 8px; }
+    footer a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>LESCO Domestic Bill Calculator</h1>
+    <p class="subtitle">Open-source calculation tool for Lahore Electric Supply Company (LESCO) consumers under latest NEPRA tariff notifications.</p>
+
+    <div class="input-group">
+      <label for="units">Total Units Consumed (kWh):</label>
+      <input type="number" id="units" placeholder="e.g. 250" value="250" min="1" max="10000" />
+    </div>
+
+    <div class="checkbox-group">
+      <input type="checkbox" id="protected" />
+      <label for="protected" style="margin-bottom: 0; cursor: pointer;">Protected Consumer (< 200 units for 6 consecutive months)</label>
+    </div>
+
+    <button onclick="calculate()">Calculate Estimated Bill</button>
+
+    <div id="results" class="results">
+      <div class="result-row"><span>Energy Cost:</span><span id="costEnergy">Rs. 0</span></div>
+      <div class="result-row"><span>Electricity Duty (1.5%):</span><span id="duty">Rs. 0</span></div>
+      <div class="result-row"><span>FC Surcharge:</span><span id="fcSurcharge">Rs. 0</span></div>
+      <div class="result-row"><span>General Sales Tax (GST):</span><span id="gst">Rs. 0</span></div>
+      <div class="result-row"><span>TV License Fee:</span><span>Rs. 35.00</span></div>
+      <div class="result-row total"><span>Payable Within Due Date:</span><span id="totalBill">Rs. 0</span></div>
+      <div class="result-row"><span>Late Payment Surcharge (~8%):</span><span id="lps">Rs. 0</span></div>
+      <div class="result-row" style="font-weight: 600; color: #f87171;"><span>Payable After Due Date:</span><span id="afterDue">Rs. 0</span></div>
+    </div>
+
+    <div class="official-box">
+      <strong>Looking for the full consumer portal?</strong><br />
+      Visit the primary web app for instant bill checking, duplicate downloads, and comprehensive guides:<br />
+      👉 <a href="https://onlinebillchecklesco.com/bill-calculator" target="_blank" rel="noopener">Interactive LESCO Bill Calculator</a><br />
+      👉 <a href="https://onlinebillchecklesco.com/lesco-tariff-guide" target="_blank" rel="noopener">Full NEPRA Tariff Slabs Breakdown</a><br />
+      👉 <a href="https://onlinebillchecklesco.com/lesco-complaint" target="_blank" rel="noopener">Consumer Complaint & Overbilling Guide</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>Independent Open Source Utility | Powered by <a href="https://onlinebillchecklesco.com" target="_blank">onlinebillchecklesco.com</a></p>
+  </footer>
+
+  <script>
+    function calculate() {
+      const units = parseInt(document.getElementById('units').value) || 0;
+      const isProtected = document.getElementById('protected').checked;
+      let cost = 0;
+
+      if (isProtected && units <= 200) {
+        if (units <= 50) cost = units * 3.95;
+        else if (units <= 100) cost = (50 * 3.95) + ((units - 50) * 7.74);
+        else cost = (100 * 7.74) + ((units - 100) * 10.20);
+      } else {
+        if (units <= 100) cost = units * 16.48;
+        else if (units <= 200) cost = (100 * 16.48) + ((units - 100) * 22.95);
+        else if (units <= 300) cost = (100 * 16.48) + (100 * 22.95) + ((units - 200) * 34.26);
+        else if (units <= 400) cost = (100 * 16.48) + (100 * 22.95) + (100 * 34.26) + ((units - 300) * 39.15);
+        else if (units <= 500) cost = (100 * 16.48) + (100 * 22.95) + (100 * 34.26) + (100 * 39.15) + ((units - 400) * 41.36);
+        else if (units <= 600) cost = (100 * 16.48) + (100 * 22.95) + (100 * 34.26) + (100 * 39.15) + (100 * 41.36) + ((units - 500) * 42.78);
+        else if (units <= 700) cost = (100 * 16.48) + (100 * 22.95) + (100 * 34.26) + (100 * 39.15) + (100 * 41.36) + (100 * 42.78) + ((units - 600) * 43.92);
+        else cost = (100 * 16.48) + (100 * 22.95) + (100 * 34.26) + (100 * 39.15) + (100 * 41.36) + (100 * 42.78) + (100 * 43.92) + ((units - 700) * 48.84);
+      }
+
+      const duty = cost * 0.015;
+      const fc = units * 3.23;
+      const tv = 35.0;
+      const gst = units > 200 ? cost * 0.18 : 0;
+      const total = Math.round(cost + duty + fc + tv + gst);
+      const lps = Math.round(total * 0.08);
+
+      document.getElementById('costEnergy').innerText = 'Rs. ' + cost.toFixed(2);
+      document.getElementById('duty').innerText = 'Rs. ' + duty.toFixed(2);
+      document.getElementById('fcSurcharge').innerText = 'Rs. ' + fc.toFixed(2);
+      document.getElementById('gst').innerText = 'Rs. ' + gst.toFixed(2);
+      document.getElementById('totalBill').innerText = 'Rs. ' + total.toLocaleString();
+      document.getElementById('lps').innerText = 'Rs. ' + lps.toLocaleString();
+      document.getElementById('afterDue').innerText = 'Rs. ' + (total + lps).toLocaleString();
+      document.getElementById('results').style.display = 'block';
+    }
+    calculate();
+  </script>
+</body>
+</html>
