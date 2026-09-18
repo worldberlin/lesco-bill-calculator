@@ -1,0 +1,20 @@
+{
+    "name": "worldberlin/lesco-bill-calculator",
+    "description": "LESCO online bill calculator and duplicate bill retrieval utility for consumers in Lahore, Kasur, Okara, and Sheikhupura.",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://onlinebillchecklesco.com",
+    "support": {
+        "homepage": "https://onlinebillchecklesco.com",
+        "docs": "https://onlinebillchecklesco.com/bill-calculator"
+    },
+    "authors": [
+        {
+            "name": "LESCO Bill Portal",
+            "homepage": "https://onlinebillchecklesco.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4"
+    }
+}
